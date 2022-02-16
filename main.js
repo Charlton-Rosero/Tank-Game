@@ -13,8 +13,7 @@ class Projectile{
     constructor(x, y){
         this.x = x;
         this.y = y;
-        // this.speed = speed;
-        //  this.damage = damage;
+        
         this.color = 'white'
         
     }
@@ -29,8 +28,8 @@ class Projectile{
 // 2/14/2022 
 class Paku {
     constructor(x, y, bullet) { 
-      this.width = 20;
-      this.height = 20;
+      this.width = 110;
+      this.height = 10;
       this.bullet = bullet;
       this.playerSpeed = 5
       this.x = x 
@@ -70,8 +69,8 @@ class Paku {
     }   
 
         border(){
-            if (this.x > 573){
-                this.x = 573
+            if (this.x > 485){
+                this.x = 485
             }
             if (this.x  < 7){
                 this.x = 7
@@ -82,7 +81,8 @@ class Paku {
             if (this.y > 773){
                 this.y = 773
             }
-
+            if (this.y < 416)
+                this.y = 416
         }
 // // keycodes 
 //     // left: 37
@@ -97,41 +97,41 @@ class Paku {
 
         switch(event.keyCode){   
             case 37:
-               console.log('left')
+            //    console.log('left')
                this.left = true
             break;   
             case 39:
                 this.right = true 
             break; 
-            case 40:
-                this.down = true
-            break; 
-            case 38:
-                this.up = true
-            break;
-            case 13:
-                this.pewpew = true
-            break;        
+            // case 40:
+            //     this.down = true
+            // break; 
+            // case 38:
+            //     this.up = true
+            // break;
+            // case 13:
+            //     this.pewpew = true
+            // break;        
         }
     }   
     keyrelease = (event) =>{
         switch(event.keyCode){   
             case 37:
-               console.log('left')
+            //    console.log('left')
                this.left = false
             break;   
             case 39:
                 this.right = false
             break; 
-            case 40:
-                this.down = false
-            break; 
-            case 38:
-                this.up = false
-            break;  
-            case 13:
-                this.pewpew = false
-            break;           
+            // case 40:
+            //     this.down = false
+            // break; 
+            // case 38:
+            //     this.up = false
+            // break;  
+            // case 13:
+            //     this.pewpew = false
+            // break;           
         }
     }   
 
@@ -142,8 +142,8 @@ class Paku {
 
 class Paku2 {
     constructor(x, y) { 
-      this.width = 20;
-      this.height = 20;
+      this.width = 110;
+      this.height = 10;
       this.bulletSpeed = 13;
       this.playerSpeed = 5
       this.x = x 
@@ -181,8 +181,8 @@ class Paku2 {
     }   
      
     border(){
-        if (this.x > 573){
-            this.x = 573
+        if (this.x > 485){
+            this.x = 485
         }
         if (this.x  < 7){
             this.x = 7
@@ -192,6 +192,9 @@ class Paku2 {
         }
         if (this.y > 773){
             this.y = 773
+        }
+        if (this.y > 388){
+            this.y = 388
         }
 
     }
@@ -206,35 +209,35 @@ class Paku2 {
 
         switch(event.keyCode){   
             case 65:
-               console.log('left')
+            //    console.log('left')
                this.left = true
             break;   
             case 68:
                 this.right = true 
             break; 
-            case 83:
-                this.down = true
-            break; 
-            case 87:
-                this.up = true
-            break;          
+            // case 83:
+            //     this.down = true
+            // break; 
+            // case 87:
+            //     this.up = true
+            // break;          
         }
     }   
     keyrelease = (event) =>{
         switch(event.keyCode){   
             case 65:
-               console.log('left')
+            //    console.log('left')
                this.left = false
             break;   
             case 68:
                 this.right = false
             break; 
-            case 83:
-                this.down = false
-            break; 
-            case 87:
-                this.up = false
-            break;          
+            // case 83:
+            //     this.down = false
+            // break; 
+            // case 87:
+            //     this.up = false
+            // break;          
         }
     }   
 
@@ -244,16 +247,21 @@ class Paku2 {
 
 // 2/16/2022
 
-let player = new Paku (200,200)
-let player2 = new Paku2 (300,20)
+let player = new Paku (300,772)
+let player2 = new Paku2 (300,7)
+let projectile = new Projectile(100,100)
 
 function clear(){
     context.fillStyle = 'black'; 
-    context.fillRect(0,0,600,800) // clear's the game every Speedment of the charactr  
+    context.fillRect(0,0,600,800) // clear's the game every Speedment of the charactr 
+    context.fillStyle = 'grey'; 
+    context.fillRect(0,410,600,4)
+
      player.draw()
      player2.draw()
+     projectile.draw()
 }
-setInterval(clear, 20)
+setInterval(clear, 11) // GAME SPEED
 
 
 
