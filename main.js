@@ -45,6 +45,7 @@ class Ball{  // You're a ball now
         context.closePath()
         this.wallCollision()
         this.bounce()
+        this.playerCollision()
     }
 
     bounce(){
@@ -57,28 +58,14 @@ class Ball{  // You're a ball now
         if (this.x + this.radius > CANVAS_WIDTH || this.x - this.radius < 0 ){
             this.xVelocity = -this.xVelocity 
         }
-        if (this.y + this.radius > CANVAS_HEIGHT || this.y - this.radius < 0 ){
-            this.yVelocity = -this.yVelocity 
-        }
+      
        
           
     }
     playerCollision(){
-        // if(){
-        //     this.x += this.xVelocity;
-        //     this.y -= this.yVelocity
-        // }
-        // p.top = p.y;
-        // p.bottom = p.y + p.height;
-        // p.left = p.x;
-        // p.right = p.x + p.width;
-        
-        // b.top = b.y - b.radius;
-        // b.bottom = b.y + b.radius;
-        // b.left = b.x - b.radius;
-        // b.right = b.x + b.radius;
-
-        // p.left < b.right && p.top < b.bottom && p.right > b.left && p.bottom > b.top;
+        if (this.y + this.radius > CANVAS_HEIGHT || this.y - this.radius < 0 ){
+            this.yVelocity = -this.yVelocity 
+        }
 
     }
     resetBall(){
