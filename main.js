@@ -7,6 +7,8 @@ let context = canvas.getContext('2d');
 
 const CANVAS_WIDTH = 600
 const CANVAS_HEIGHT = 800
+const playerWidth = 100
+const playerHeight =10
 
 // 2/16/2022
 class Text{
@@ -32,9 +34,30 @@ class Ball{  // You're a ball now
         this.radius = radius
         this.color = 'white'
         // this.speed = 10
-        this.xVelocity = 5
-        this.yVelocity = 5
-        
+        this.xVelocity = 2
+        this.yVelocity = 2
+
+    // player One
+      this.width = 100;
+      this.height = 10;
+      this.playerSpeed = 5
+      this.paddlex = CANVAS_WIDTH/2 - 100/2 
+      this.paddley =  783    
+      this.score = 0
+      addEventListener('keydown', this.keypressed)
+      addEventListener('keyup', this.keyrelease)
+
+    //player Two
+        this.p2Width = 100;
+        this.p2Height = 10;
+        //   this.bullet = bullet;
+        this.playerSpeed = 5
+        this.p2x = CANVAS_WIDTH/2 - 100/2 
+        this.p2y =  783    
+        this.p2score = 0
+
+
+
     }
 
     draw(){
@@ -43,102 +66,94 @@ class Ball{  // You're a ball now
         context.fillStyle = this.color
         context.fill()
         context.closePath()
-        this.wallCollision()
-        this.bounce()
-        this.playerCollision()
+        this.border()
+        this.Speed()
+        context.fillStyle = 'white'
+        context.fillRect(this.paddlex, this.paddley, this.width, this.height);
+        // console.log(this.player.width)
+      
+       
     }
 
-    bounce(){
+    bounce(){ 
         this.x += this.xVelocity;
-        this.y -= this.yVelocity
-    }
-
-    wallCollision(){
+        this.y += this.yVelocity
 
         if (this.x + this.radius > CANVAS_WIDTH || this.x - this.radius < 0 ){
             this.xVelocity = -this.xVelocity 
         }
-      
-       
-          
-    }
-    playerCollision(){
-        if (this.y + this.radius > CANVAS_HEIGHT || this.y - this.radius < 0 ){
+        if (/*this.y + this.radius > CANVAS_HEIGHT ||*/ this.y - this.radius < 0 ){
             this.yVelocity = -this.yVelocity 
         }
+        //stop ball if hit right side
+        if (this.y > CANVAS_HEIGHT){
+                this.xVelocity = 0;
+                this.yVelocity = 0;
+       
+        }
+        
+        let ballBottom = this.y + this.radius 
+        let paddle = this.paddley
+        let lPaddle = this.paddlex
+        let rPaddle = this.paddlex + this.width
 
-    }
-    resetBall(){
-
-    }
-
-
-
+    if(ballBottom >= paddle && this.x >= lPaddle && this.x  <= rPaddle){//   
+        this.yVelocity = - this.yVelocity;
+        this.y = this.paddley - this.radius
+        
+       }
+        // if (this.y > this.player.y && (this.x > this.player.x && this.x < (this.player.y + this.player.width) ) ){
+        //     console.log(this.player.y)
+        // this.yVelocity = - this.yVelocity;
+        
+        // }
+         
+        // //stop ball if hit left side
+        //  if (this.yPos >cHeight){
+        //         this.speedX =0;
+        //         this.speedY =0;
+                
+        //         }
+        //         //bounce off player 2 paddle
+        //    else if (this.yPos >player1.yPosPaddle && (this.yPos > player1.yPosPaddle && this.yPos< (player1.yPosPaddle+player1.paddleWidth) ) ){
+        // this.speedY = - this.speedY;
+               
+               
+        //    }
     
-
-
-  
-}
-
-// 2/14/2022 
-class Paku {
-    constructor(x, y,) { 
-      this.width = 100;
-      this.height = 10;
-    //   this.bullet = bullet;
-      this.playerSpeed = 5
-      this.x = x 
-      this.y = y     
-      this.score = 0
-
-      addEventListener('keydown', this.keypressed)
-      addEventListener('keyup', this.keyrelease)
-
-    }
     
-    draw() { // Draws everything on the canvas
-        this.border()
-        this.Speed()
-        context.fillStyle = 'white'
-        context.fillRect(this.x, this.y, this.width, this.height);
-        // this.pew()
-     }
+    }
 
-    //  pew(){
-    //      if(this.pewpew){
-    //          console.log('pewpew')
-    //      }
-    //  }
     Speed(){
         if(this.left){
-            this.x  -= this.playerSpeed
+            this.paddlex  -= this.playerSpeed
         }
         if(this.right){
-            this.x  += this.playerSpeed
+            this.paddlex  += this.playerSpeed
         }
         if(this.up){
-            this.y  -= this.playerSpeed
+            this.paddley  -= this.playerSpeed
         }
         if(this.down){
-            this.y  += this.playerSpeed
+            this.paddley  += this.playerSpeed
         }
     }   
 
         border(){
-            if (this.x > 495){
-                this.x = 495
+            if (this.paddlex > 495){
+                this.paddlex = 495
             }
-            if (this.x  < 7){
-                this.x = 7
+            if (this.paddlex  < 7){
+                this.paddlex = 7
             }
-            if (this.y < 7){
-                this.y = 7
+            if (this.paddley < 7){
+                this.paddley = 7
             }
-            if (this.y > 800){
-                this.y = 800
+            if (this.paddley > 800){
+                this.paddley = 800
             }
-            if (this.y < 416)
-                this.y = 416
+            if (this.paddley < 416)
+                this.paddley = 416
         }
 // // keycodes 
 //     // left: 37
@@ -190,118 +205,241 @@ class Paku {
             // break;           
         }
     }   
-
-}
-class Paku2 {
-    constructor(x, y) { 
-      this.width = 100;
-      this.height = 10;
-    //   this.bulletSpeed = 13;
-      this.playerSpeed = 5
-      this.x = x 
-      this.y = y   
-      this.score = 0  
-
-      addEventListener('keydown', this.keypressed)
-      addEventListener('keyup', this.keyrelease)
-
-    }
     
-    
-    draw() {  
-        // this.pew()
-        this.border()
-        this.Speed()
-        context.fillStyle = 'white'
-        context.fillRect(this.x, this.y, this.width, this.height);
-        
-     }
 
    
-    Speed(){
-        if(this.left){
-            this.x  -= this.playerSpeed
-        }
-        if(this.right){
-            this.x  += this.playerSpeed
-        }
-        if(this.up){
-            this.y  -= this.playerSpeed
-        }
-        if(this.down){
-            this.y  += this.playerSpeed
-        }
-    }   
-     
-    border(){
-        if (this.x > 495){
-            this.x = 495
-        }
-        if (this.x  < 7){
-            this.x = 7
-        }
-        if (this.y < 7){
-            this.y = 7
-        }
-        if (this.y > 773){
-            this.y = 773
-        }
-        if (this.y > 388){
-            this.y = 388
-        }
 
+    resetBall(){
+        // then increment score
+        this.y = CANVAS_HEIGHT/2 - 7/2
     }
-//  // KEYCODES
-    // space: 32
-    // W: 87
-    // a: 65
-    // s: 83
-    // d: 68
 
-    keypressed = (event) =>{
 
-        switch(event.keyCode){   
-            case 65:
-            //    console.log('left')
-               this.left = true
-            break;   
-            case 68:
-                this.right = true 
-            break; 
-            // case 83:
-            //     this.down = true
-            // break; 
-            // case 87:
-            //     this.up = true
-            // break;          
-        }
-    }   
-    keyrelease = (event) =>{
-        switch(event.keyCode){   
-            case 65:
-            //    console.log('left')
-               this.left = false
-            break;   
-            case 68:
-                this.right = false
-            break; 
-            // case 83:
-            //     this.down = false
-            // break; 
-            // case 87:
-            //     this.up = false
-            // break;          
-        }
-    }   
 
+    
+
+
+  
 }
+
+// 2/14/2022 
+// class Paku {
+//     constructor() { 
+//       this.width = 100;
+//       this.height = 10;
+//     //   this.bullet = bullet;
+//       this.playerSpeed = 5
+//       this.x = CANVAS_WIDTH/2 - 100/2 
+//       this.y =  783    
+//       this.score = 0
+
+//       addEventListener('keydown', this.keypressed)
+//       addEventListener('keyup', this.keyrelease)
+
+//     }
+    
+//     draw() { // Draws everything on the canvas
+//         this.border()
+//         this.Speed()
+//         context.fillStyle = 'white'
+//         context.fillRect(this.x, this.y, this.width, this.height);
+       
+//      }
+
+  
+//     Speed(){
+//         if(this.left){
+//             this.x  -= this.playerSpeed
+//         }
+//         if(this.right){
+//             this.x  += this.playerSpeed
+//         }
+//         if(this.up){
+//             this.y  -= this.playerSpeed
+//         }
+//         if(this.down){
+//             this.y  += this.playerSpeed
+//         }
+//     }   
+
+//         border(){
+//             if (this.x > 495){
+//                 this.x = 495
+//             }
+//             if (this.x  < 7){
+//                 this.x = 7
+//             }
+//             if (this.y < 7){
+//                 this.y = 7
+//             }
+//             if (this.y > 800){
+//                 this.y = 800
+//             }
+//             if (this.y < 416)
+//                 this.y = 416
+//         }
+// // // keycodes 
+// //     // left: 37
+// //     // right: 39
+// //     // down: 40
+// //     // up: 38
+// //     // space: 32
+//        // Enter: 13
+//     keypressed = (event) =>{
+//         // test
+//         // console.log(event)
+
+//         switch(event.keyCode){   
+//             case 37:
+//             //    console.log('left')
+//                this.left = true
+//             break;   
+//             case 39:
+//                 this.right = true 
+//             break; 
+//             // case 40:
+//             //     this.down = true
+//             // break; 
+//             // case 38:
+//             //     this.up = true
+//             // break;
+//             // case 13:
+//             //     this.pewpew = true
+//             // break;        
+//         }
+//     }   
+//     keyrelease = (event) =>{
+//         switch(event.keyCode){   
+//             case 37:
+//             //    console.log('left')
+//                this.left = false
+//             break;   
+//             case 39:
+//                 this.right = false
+//             break; 
+//             // case 40:
+//             //     this.down = false
+//             // break; 
+//             // case 38:
+//             //     this.up = false
+//             // break;  
+//             // case 13:
+//             //     this.pewpew = false
+//             // break;           
+//         }
+//     }   
+
+// }
+// class Paku2 {
+//     constructor(x, y) { 
+//       this.width = 100;
+//       this.height = 10;
+//     //   this.bulletSpeed = 13;
+//       this.playerSpeed = 5
+//       this.x = x 
+//       this.y = y   
+//       this.score = 0  
+
+//       addEventListener('keydown', this.keypressed)
+//       addEventListener('keyup', this.keyrelease)
+
+//     }
+    
+    
+//     draw() {  
+//         // this.pew()
+//         this.border()
+//         this.Speed()
+//         context.fillStyle = 'white'
+//         context.fillRect(this.x, this.y, this.width, this.height);
+        
+//      }
+
+   
+//     Speed(){
+//         if(this.left){
+//             this.x  -= this.playerSpeed
+//         }
+//         if(this.right){
+//             this.x  += this.playerSpeed
+//         }
+//         if(this.up){
+//             this.y  -= this.playerSpeed
+//         }
+//         if(this.down){
+//             this.y  += this.playerSpeed
+//         }
+//     }   
+     
+//     border(){
+//         if (this.x > 495){
+//             this.x = 495
+//         }
+//         if (this.x  < 7){
+//             this.x = 7
+//         }
+//         if (this.y < 7){
+//             this.y = 7
+//         }
+//         if (this.y > 773){
+//             this.y = 773
+//         }
+//         if (this.y > 388){
+//             this.y = 388
+//         }
+
+//     }
+// //  // KEYCODES
+//     // space: 32
+//     // W: 87
+//     // a: 65
+//     // s: 83
+//     // d: 68
+
+//     keypressed = (event) =>{
+
+//         switch(event.keyCode){   
+//             case 65:
+//             //    console.log('left')
+//                this.left = true
+//             break;   
+//             case 68:
+//                 this.right = true 
+//             break; 
+//             // case 83:
+//             //     this.down = true
+//             // break; 
+//             // case 87:
+//             //     this.up = true
+//             // break;          
+//         }
+//     }   
+//     keyrelease = (event) =>{
+//         switch(event.keyCode){   
+//             case 65:
+//             //    console.log('left')
+//                this.left = false
+//             break;   
+//             case 68:
+//                 this.right = false
+//             break; 
+//             // case 83:
+//             //     this.down = false
+//             // break; 
+//             // case 87:
+//             //     this.up = false
+//             // break;          
+//         }
+//     }   
+
+// }
 
 
 
 // 2/16/2022
 
-let player = new Paku (CANVAS_WIDTH/2 - 100/2, 783)
-let player2 = new Paku2 (CANVAS_WIDTH/2 - 100/2, 7)
+// let player = new Paku ()
+// let player2 = new Paku2 (CANVAS_WIDTH/2 - 100/2, 7)
 let projectile = new Ball(CANVAS_WIDTH/2 - 7/2,CANVAS_HEIGHT/2 -7/2,7)
 
 function clear(){ 
@@ -311,9 +449,9 @@ function clear(){
     projectile.draw()
     context.fillStyle = 'grey'; 
     context.fillRect(0,CANVAS_HEIGHT/2 - 4/2,600,4)
-    
-     player.draw()
-     player2.draw()
+    //  player.draw()
+     projectile.bounce()
+    //  player2.draw()
      
 }
 setInterval(clear, 11) // GAME SPEED
