@@ -34,8 +34,8 @@ class Ball{  // You're a ball now
         this.radius = radius
         this.color = 'white'
         // this.speed = 10
-        this.xVelocity = 2
-        this.yVelocity = 2
+        this.xVelocity = 5
+        this.yVelocity = 5
 
     // player One
       this.width = 100;
@@ -50,14 +50,10 @@ class Ball{  // You're a ball now
     //player Two
         this.p2Width = 100;
         this.p2Height = 10;
-        //   this.bullet = bullet;
-        this.playerSpeed = 5
+        this.player2Speed = 5
         this.p2x = CANVAS_WIDTH/2 - 100/2 
-        this.p2y =  783    
+        this.p2y =  7
         this.p2score = 0
-
-
-
     }
 
     draw(){
@@ -70,6 +66,12 @@ class Ball{  // You're a ball now
         this.Speed()
         context.fillStyle = 'white'
         context.fillRect(this.paddlex, this.paddley, this.width, this.height);
+
+        //player 2
+        
+        context.fillStyle = 'white'
+        context.fillRect(this.p2x, this.p2y, this.p2Width, this.p2Height);
+        this.bounce()
         // console.log(this.player.width)
       
        
@@ -82,11 +84,9 @@ class Ball{  // You're a ball now
         if (this.x + this.radius > CANVAS_WIDTH || this.x - this.radius < 0 ){
             this.xVelocity = -this.xVelocity 
         }
-        if (/*this.y + this.radius > CANVAS_HEIGHT ||*/ this.y - this.radius < 0 ){
-            this.yVelocity = -this.yVelocity 
-        }
-        //stop ball if hit right side
-        if (this.y > CANVAS_HEIGHT){
+        
+      
+        if (this.y > CANVAS_HEIGHT || this. y < 0){
                 this.xVelocity = 0;
                 this.yVelocity = 0;
        
@@ -97,31 +97,23 @@ class Ball{  // You're a ball now
         let lPaddle = this.paddlex
         let rPaddle = this.paddlex + this.width
 
+        let ballTop = this.y 
+        let Ppaddle = this.p2y
+        let l2Paddle = this.p2x
+        let r2Paddle = this.p2x + this.p2Width
+        let bottomOfRect = this.p2y + this.p2Height
+
     if(ballBottom >= paddle && this.x >= lPaddle && this.x  <= rPaddle){//   
-        this.yVelocity = - this.yVelocity;
+        this.yVelocity = -1* this.yVelocity;
         this.y = this.paddley - this.radius
         
        }
-        // if (this.y > this.player.y && (this.x > this.player.x && this.x < (this.player.y + this.player.width) ) ){
-        //     console.log(this.player.y)
-        // this.yVelocity = - this.yVelocity;
+    
+       if(ballBottom >= Ppaddle && ballTop <= bottomOfRect &&this.x >= l2Paddle && this.x  <= r2Paddle){//   
+        this.yVelocity = -1* this.yVelocity;
         
-        // }
-         
-        // //stop ball if hit left side
-        //  if (this.yPos >cHeight){
-        //         this.speedX =0;
-        //         this.speedY =0;
-                
-        //         }
-        //         //bounce off player 2 paddle
-        //    else if (this.yPos >player1.yPosPaddle && (this.yPos > player1.yPosPaddle && this.yPos< (player1.yPosPaddle+player1.paddleWidth) ) ){
-        // this.speedY = - this.speedY;
-               
-               
-        //    }
-    
-    
+        
+       }
     }
 
     Speed(){
@@ -137,8 +129,19 @@ class Ball{  // You're a ball now
         if(this.down){
             this.paddley  += this.playerSpeed
         }
+        if(this.pleft){
+            this.p2x  -= this.player2Speed
+        }
+        if(this.pright){
+            this.p2x  += this.player2Speed
+        }
+        if(this.pup){
+            this.p2y  -= this.player2Speed
+        }
+        if(this.pdown){
+            this.p2y  += this.player2Speed
+        }
     }   
-
         border(){
             if (this.paddlex > 495){
                 this.paddlex = 495
@@ -154,17 +157,27 @@ class Ball{  // You're a ball now
             }
             if (this.paddley < 416)
                 this.paddley = 416
+             if (this.p2x > 495){
+                this.p2x = 495
+            }
+            if (this.p2x  < 7){
+                this.p2x = 7
+            }
+            if (this.p2y < 7){
+                this.p2y = 7
+            }
+            if (this.p2y > 773){
+                this.p2y = 773
+            }
+            if (this.p2y > 388){
+                this.p2y = 388
+            }
+        
         }
-// // keycodes 
-//     // left: 37
-//     // right: 39
-//     // down: 40
-//     // up: 38
-//     // space: 32
-       // Enter: 13
+      
+
     keypressed = (event) =>{
-        // test
-        // console.log(event)
+      
 
         switch(event.keyCode){   
             case 37:
@@ -174,39 +187,66 @@ class Ball{  // You're a ball now
             case 39:
                 this.right = true 
             break; 
-            // case 40:
-            //     this.down = true
-            // break; 
-            // case 38:
-            //     this.up = true
-            // break;
-            // case 13:
-            //     this.pewpew = true
-            // break;        
+            case 65:
+                this.pleft = true
+             break;   
+             case 68:
+                 this.pright = true 
+             break; 
+         
         }
     }   
     keyrelease = (event) =>{
         switch(event.keyCode){   
             case 37:
-            //    console.log('left')
                this.left = false
             break;   
             case 39:
                 this.right = false
             break; 
-            // case 40:
-            //     this.down = false
-            // break; 
-            // case 38:
-            //     this.up = false
-            // break;  
-            // case 13:
-            //     this.pewpew = false
-            // break;           
+            case 65:
+               this.pleft = false
+            break;   
+            case 68:
+                this.pright = false
+            break; 
         }
     }   
     
+      
+     
+   
+//  // KEYCODES
+    // space: 32
+    // W: 87
+    // a: 65
+    // s: 83
+    // d: 68
 
+    // keypressed2 = (event) =>{
+
+    //     switch(event.keyCode){   
+    //         case 65:
+            
+    //            this.left = true
+    //         break;   
+    //         case 68:
+    //             this.right = true 
+    //         break; 
+             
+    //     }
+    // }   
+    // keyrelease2 = (event) =>{
+    //     switch(event.keyCode){   
+            
+    //         // case 83:
+    //         //     this.down = false
+    //         // break; 
+    //         // case 87:
+    //         //     this.up = false
+    //         // break;          
+    //     }
+    // }   
    
 
     resetBall(){
@@ -331,61 +371,60 @@ class Ball{  // You're a ball now
 
 // }
 // class Paku2 {
-//     constructor(x, y) { 
-//       this.width = 100;
-//       this.height = 10;
-//     //   this.bulletSpeed = 13;
-//       this.playerSpeed = 5
-//       this.x = x 
-//       this.y = y   
-//       this.score = 0  
+//     constructor() { 
+//  this.p2Width = 100;
+//  this.p2Height = 10;
+//  this.player2Speed = 5
+//  this.p2x = CANVAS_WIDTH/2 - 100/2 
+//  this.p2y =  783    
+//  this.p2score = 0
 
-//       addEventListener('keydown', this.keypressed)
-//       addEventListener('keyup', this.keyrelease)
+//       addEventListener('keydown', this.keypressed2)
+//       addEventListener('keyup', this.keyrelease2)
 
 //     }
     
     
 //     draw() {  
-//         // this.pew()
-//         this.border()
-//         this.Speed()
+//
+//         this.border2()
+//         this.Speed2()
 //         context.fillStyle = 'white'
-//         context.fillRect(this.x, this.y, this.width, this.height);
+//         context.fillRect(this.p2x, this.p2y, this.p2Width, this.p2Height);
         
 //      }
 
    
-//     Speed(){
+//     Speed2(){
 //         if(this.left){
-//             this.x  -= this.playerSpeed
+//             this.p2x  -= this.player2Speed
 //         }
 //         if(this.right){
-//             this.x  += this.playerSpeed
+//             this.p2x  += this.playe2rSpeed
 //         }
 //         if(this.up){
-//             this.y  -= this.playerSpeed
+//             this.p2y  -= this.player2Speed
 //         }
 //         if(this.down){
-//             this.y  += this.playerSpeed
+//             this.p2y  += this.player2Speed
 //         }
 //     }   
      
-//     border(){
-//         if (this.x > 495){
-//             this.x = 495
+//     border2(){
+//         if (this.p2x > 495){
+//             this.p2x = 495
 //         }
-//         if (this.x  < 7){
-//             this.x = 7
+//         if (this.p2x  < 7){
+//             this.p2x = 7
 //         }
-//         if (this.y < 7){
-//             this.y = 7
+//         if (this.p2y < 7){
+//             this.p2y = 7
 //         }
-//         if (this.y > 773){
-//             this.y = 773
+//         if (this.p2y > 773){
+//             this.p2y = 773
 //         }
-//         if (this.y > 388){
-//             this.y = 388
+//         if (this.p2y > 388){
+//             this.p2y = 388
 //         }
 
 //     }
@@ -396,7 +435,7 @@ class Ball{  // You're a ball now
 //     // s: 83
 //     // d: 68
 
-//     keypressed = (event) =>{
+//     keypressed2 = (event) =>{
 
 //         switch(event.keyCode){   
 //             case 65:
@@ -414,7 +453,7 @@ class Ball{  // You're a ball now
 //             // break;          
 //         }
 //     }   
-//     keyrelease = (event) =>{
+//     keyrelease2 = (event) =>{
 //         switch(event.keyCode){   
 //             case 65:
 //             //    console.log('left')
@@ -450,7 +489,7 @@ function clear(){
     context.fillStyle = 'grey'; 
     context.fillRect(0,CANVAS_HEIGHT/2 - 4/2,600,4)
     //  player.draw()
-     projectile.bounce()
+  
     //  player2.draw()
      
 }
