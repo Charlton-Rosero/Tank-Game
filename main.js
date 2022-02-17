@@ -6,34 +6,103 @@ let context = canvas.getContext('2d');
 //***CANVAS WIDTH="600" HEIGHT="800"***//
 
 const CANVAS_WIDTH = 600
-const Canvas_HEIGHT = 800
+const CANVAS_HEIGHT = 800
 
 // 2/16/2022
-class Projectile{
-    constructor(x, y){
+class Text{
+    constructor(str, x, y){
+      this.str = str;
+      this.x = x ;
+      this.y = y ;  
+
+    }
+    draw(){
+
+    }
+}
+
+
+
+
+
+class Ball{  // You're a ball now
+    constructor(x, y, radius){
         this.x = x;
         this.y = y;
-        
+        this.radius = radius
         this.color = 'white'
+        // this.speed = 10
+        this.xVelocity = 5
+        this.yVelocity = 5
         
     }
 
     draw(){
+        context.beginPath()
+        context.arc(this.x,this.y, this.radius, 0 ,360, false)
         context.fillStyle = this.color
-        context.fillRect(this.x, this.y, 5, 5);
+        context.fill()
+        context.closePath()
+        this.wallCollision()
+        this.bounce()
     }
 
+    bounce(){
+        this.x += this.xVelocity;
+        this.y -= this.yVelocity
+    }
+
+    wallCollision(){
+
+        if (this.x + this.radius > CANVAS_WIDTH || this.x - this.radius < 0 ){
+            this.xVelocity = -this.xVelocity 
+        }
+        if (this.y + this.radius > CANVAS_HEIGHT || this.y - this.radius < 0 ){
+            this.yVelocity = -this.yVelocity 
+        }
+       
+          
+    }
+    playerCollision(){
+        // if(){
+        //     this.x += this.xVelocity;
+        //     this.y -= this.yVelocity
+        // }
+        // p.top = p.y;
+        // p.bottom = p.y + p.height;
+        // p.left = p.x;
+        // p.right = p.x + p.width;
+        
+        // b.top = b.y - b.radius;
+        // b.bottom = b.y + b.radius;
+        // b.left = b.x - b.radius;
+        // b.right = b.x + b.radius;
+
+        // p.left < b.right && p.top < b.bottom && p.right > b.left && p.bottom > b.top;
+
+    }
+    resetBall(){
+
+    }
+
+
+
+    
+
+
+  
 }
 
 // 2/14/2022 
 class Paku {
-    constructor(x, y, bullet) { 
-      this.width = 110;
+    constructor(x, y,) { 
+      this.width = 100;
       this.height = 10;
-      this.bullet = bullet;
+    //   this.bullet = bullet;
       this.playerSpeed = 5
       this.x = x 
       this.y = y     
+      this.score = 0
 
       addEventListener('keydown', this.keypressed)
       addEventListener('keyup', this.keyrelease)
@@ -45,14 +114,14 @@ class Paku {
         this.Speed()
         context.fillStyle = 'white'
         context.fillRect(this.x, this.y, this.width, this.height);
-        this.pew()
+        // this.pew()
      }
 
-     pew(){
-         if(this.pewpew){
-             console.log('pewpew')
-         }
-     }
+    //  pew(){
+    //      if(this.pewpew){
+    //          console.log('pewpew')
+    //      }
+    //  }
     Speed(){
         if(this.left){
             this.x  -= this.playerSpeed
@@ -69,8 +138,8 @@ class Paku {
     }   
 
         border(){
-            if (this.x > 485){
-                this.x = 485
+            if (this.x > 495){
+                this.x = 495
             }
             if (this.x  < 7){
                 this.x = 7
@@ -78,8 +147,8 @@ class Paku {
             if (this.y < 7){
                 this.y = 7
             }
-            if (this.y > 773){
-                this.y = 773
+            if (this.y > 800){
+                this.y = 800
             }
             if (this.y < 416)
                 this.y = 416
@@ -136,18 +205,15 @@ class Paku {
     }   
 
 }
-
-
-
-
 class Paku2 {
     constructor(x, y) { 
-      this.width = 110;
+      this.width = 100;
       this.height = 10;
-      this.bulletSpeed = 13;
+    //   this.bulletSpeed = 13;
       this.playerSpeed = 5
       this.x = x 
-      this.y = y     
+      this.y = y   
+      this.score = 0  
 
       addEventListener('keydown', this.keypressed)
       addEventListener('keyup', this.keyrelease)
@@ -181,8 +247,8 @@ class Paku2 {
     }   
      
     border(){
-        if (this.x > 485){
-            this.x = 485
+        if (this.x > 495){
+            this.x = 495
         }
         if (this.x  < 7){
             this.x = 7
@@ -247,31 +313,31 @@ class Paku2 {
 
 // 2/16/2022
 
-let player = new Paku (300,772)
-let player2 = new Paku2 (300,7)
-let projectile = new Projectile(100,100)
+let player = new Paku (CANVAS_WIDTH/2 - 100/2, 783)
+let player2 = new Paku2 (CANVAS_WIDTH/2 - 100/2, 7)
+let projectile = new Ball(CANVAS_WIDTH/2 - 7/2,CANVAS_HEIGHT/2 -7/2,7)
 
-function clear(){
+function clear(){ 
+    
     context.fillStyle = 'black'; 
     context.fillRect(0,0,600,800) // clear's the game every Speedment of the charactr 
+    projectile.draw()
     context.fillStyle = 'grey'; 
-    context.fillRect(0,410,600,4)
-
+    context.fillRect(0,CANVAS_HEIGHT/2 - 4/2,600,4)
+    
      player.draw()
      player2.draw()
-     projectile.draw()
+     
 }
 setInterval(clear, 11) // GAME SPEED
 
-
-
-
-
-
-
 /*************************************************************/
+//      HERE LIES MY HOPES AND DREAMS
 /************************************************************/
-// ORIGINAL CODE
+// ORIGINAL CODE/LOGIC 
+//THE NEW CODE STILL USES THE SAME LOGIC  BUT IT HAS IMPROVED MOBILITY AND FUNCTIONALITY.
+
+//TECHNICALLY I CAN STILL MAKE A TANK GAME IF I CAN FIGURE OUT THOSE BLOODY PROJECTILES.
 
 // class Projectile{
 //     constructor(x, y){
